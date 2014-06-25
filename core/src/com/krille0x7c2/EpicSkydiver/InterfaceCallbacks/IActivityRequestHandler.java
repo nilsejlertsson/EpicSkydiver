@@ -24,4 +24,5 @@ public interface IActivityRequestHandler {
 
     public void onSignInFailed();
 
+
 }
