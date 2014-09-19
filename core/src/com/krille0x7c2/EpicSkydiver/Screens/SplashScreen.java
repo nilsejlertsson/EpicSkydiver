@@ -4,15 +4,12 @@ package com.krille0x7c2.EpicSkydiver.Screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-
 import com.badlogic.gdx.graphics.GL20;
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
 import com.krille0x7c2.EpicSkydiver.Tween.SpriteAccessorSplash;
 
 import aurelienribon.tweenengine.BaseTween;
@@ -22,28 +19,20 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 
-public class SplashScreen extends Game implements Screen {
+public class SplashScreen implements Screen {
 
     private SpriteBatch batch;
     private Sprite sprite;
-
-
-    private int gameHight;
     private float gameMidPointY;
     private GameWorld myGame;
-
     private TextureRegion splashDude;
     private TextureRegion splashTitle;
     private TextureRegion splashBackground;
-    private IActivityRequestHandler hand;
     private TweenManager tweenManager;
 
-    public SplashScreen(IActivityRequestHandler hand) {
-
-        this.hand = hand;
-        hand.showAds(false);
-
+    public SplashScreen() {
     }
+
 
     @Override
     public void render(float delta) {
@@ -59,6 +48,7 @@ public class SplashScreen extends Game implements Screen {
         batch.end();
 
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -82,19 +72,20 @@ public class SplashScreen extends Game implements Screen {
         batch = new SpriteBatch();
     }
 
-    private void setupTween() {
+
+    public void setupTween() {
 
         Tween.registerAccessor(Sprite.class, new SpriteAccessorSplash());
         tweenManager = new TweenManager();
 
-        final SplashScreen sp = new SplashScreen(hand);
+        final SplashScreen sp = this;
         TweenCallback cb = new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
 
                 ((Game) Gdx.app.getApplicationListener())
 
-                        .setScreen(new GameMenuScreen(myGame, hand));
+                        .setScreen(new GameMenuScreen(myGame));
 
             }
         };
@@ -130,9 +121,5 @@ public class SplashScreen extends Game implements Screen {
 
     }
 
-    @Override
-    public void create() {
-
-    }
 
 }

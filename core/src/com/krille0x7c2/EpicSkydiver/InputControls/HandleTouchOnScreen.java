@@ -3,7 +3,7 @@ package com.krille0x7c2.EpicSkydiver.InputControls;
 
 import com.badlogic.gdx.InputProcessor;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Player;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
 
 public class HandleTouchOnScreen implements InputProcessor {

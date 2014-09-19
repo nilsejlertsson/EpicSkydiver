@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import aurelienribon.tweenengine.TweenAccessor;
 
 /**
- * Created by hammerhead on 30/03/14.
+ * Created by Christian Bodelsson on 9/19/14.
+ * email:krille0x7c2@gmail.com
  */
-
 public class SpritAccessor implements TweenAccessor<Sprite> {
 
     public static final int ALPHA = 0;

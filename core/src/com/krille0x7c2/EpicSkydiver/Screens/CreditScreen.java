@@ -2,40 +2,24 @@ package com.krille0x7c2.EpicSkydiver.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.CreditWorld.CreditWorld;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
 import com.krille0x7c2.EpicSkydiver.ObjectsOutsideTheGame.Credits;
 
 
 public class CreditScreen implements Screen {
 
 
+    public GameWorld myGame;
     protected float screenWidth;
     protected float screenHeight;
     protected float gameWidth;
@@ -48,14 +32,9 @@ public class CreditScreen implements Screen {
     private TextureRegion bg;
 
 
-    public GameWorld myGame;
-    private IActivityRequestHandler hand;
-
-    public CreditScreen(GameWorld myGame, IActivityRequestHandler hand) {
+    public CreditScreen(GameWorld myGame) {
 
 
-        this.hand = hand;
-        hand.showAds(false);
         this.myGame = myGame;
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
@@ -114,12 +93,13 @@ public class CreditScreen implements Screen {
             @Override
             public boolean keyUp(final int keycode) {
                 if (keycode == Keys.BACK) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame, hand));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame));
                 }
                 return false;
             }
         });
     }
+
 
     @Override
     public void hide() {

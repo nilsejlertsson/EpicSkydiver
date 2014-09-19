@@ -1,10 +1,15 @@
-package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame;
+package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Coin;
 
-public class Coin1 {
+/**
+ * Created by Christian Bodelsson on 9/19/14.
+ * email:krille0x7c2@gmail.com
+ */
+public class CoinTemplate implements Coin {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
@@ -12,13 +17,17 @@ public class Coin1 {
     private float rotation;
     private int width;
     private int height;
+    private int vectorInit;
+    private int randomSeed;
     private Rectangle coinBounds;
 
-    public Coin1(float x, float y, int width, int height) {
+    public CoinTemplate(float x, float y, int width, int height, int vectorInit, int randomSeed) {
         this.width = width;
         this.height = height;
+        this.vectorInit = vectorInit;
+        this.randomSeed = randomSeed;
         position = new Vector2(x, y);
-        velocity = new Vector2(0, -20);
+        velocity = new Vector2(0, vectorInit);
         acceleration = new Vector2(0, 0);
         coinBounds = new Rectangle();
 
@@ -73,7 +82,7 @@ public class Coin1 {
 
     public void randomPosition() {
         position.y = 215;
-        position.x = MathUtils.random(10, 136 - 30);
+        position.x = MathUtils.random(10, 136 - randomSeed);
 
     }
 

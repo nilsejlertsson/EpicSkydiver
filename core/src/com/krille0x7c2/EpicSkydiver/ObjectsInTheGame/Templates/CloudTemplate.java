@@ -1,9 +1,10 @@
-package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame;
+package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates;
 
 
 import com.badlogic.gdx.math.Vector2;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Cloud;
 
-public class Clouds {
+public class CloudTemplate implements Cloud {
 
     private Vector2 position;
     private Vector2 velocity;
@@ -13,7 +14,7 @@ public class Clouds {
     private int width;
     private int height;
 
-    public Clouds(float x, float y, int width, int height) {
+    public CloudTemplate(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);

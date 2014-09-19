@@ -2,15 +2,13 @@ package com.krille0x7c2.EpicSkydiver.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,34 +16,25 @@ import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
 import com.krille0x7c2.EpicSkydiver.Connections.Score;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
 
 
 public class ScoreScreen implements Screen {
 
-    private SpriteBatch batch;
-    protected BitmapFont whiteText;
-    private OrthographicCamera cam;
     public static Texture textureStart;
-    private Score score;
     public GameWorld myGame;
+    protected BitmapFont whiteText;
+    private SpriteBatch batch;
+    private OrthographicCamera cam;
+    private Score score;
     private TextureRegion splashBackground;
     private Texture splashTexture;
 
 
     private Sprite splash;
-    private IActivityRequestHandler hand;
-
-    public ScoreScreen(
-            final IActivityRequestHandler hand) {
 
 
-        this.hand = hand;
-        hand.showAds(false);
+    public ScoreScreen() {
 
-        // score = new Score(1, Preference.getHighScore());
-
-        // score = new Score(1, Preference.getHighScore());
 
         cam = new OrthographicCamera();
         cam.setToOrtho(true, 136, 204);
@@ -54,11 +43,7 @@ public class ScoreScreen implements Screen {
         loadPic();
         Gdx.input.setCatchBackKey(true);
 
-        // try {
-        // nativeSql.getScore(1);
-        // } catch (Exception e) {
-        // nativeSql.addScore(0);
-        // }
+
     }
 
     @Override
@@ -68,7 +53,6 @@ public class ScoreScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        // splash.draw(batch);
 
         batch.draw(splashBackground, 0, 0, 136, 204);
         drawHighScoreTitle();
@@ -89,12 +73,13 @@ public class ScoreScreen implements Screen {
             @Override
             public boolean keyUp(final int keycode) {
                 if (keycode == Keys.BACK) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame, hand));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame));
                 }
                 return false;
             }
         });
     }
+
 
     private void loadPic() {
         splashBackground = Pictures.sky;
@@ -107,14 +92,11 @@ public class ScoreScreen implements Screen {
 
     private void drawHighScore() {
 
-        // int x = Preference.getHighScore();
-        // int y = nativeSql.getScore(1).getScore();
-        // if (x >= y) {
+
         String scoreFromPref = Preference.getHighScore() + "";
         Pictures.whiteHighScore.draw(batch, "" + Preference.getHighScore(),
                 ((136 / 2)) - (13 * scoreFromPref.length()), 90);
-        // nativeSql.updateScore(score);
-        // }
+
     }
 
     @Override

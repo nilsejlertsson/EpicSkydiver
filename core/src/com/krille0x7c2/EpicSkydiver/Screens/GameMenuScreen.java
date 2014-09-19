@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
 import com.krille0x7c2.EpicSkydiver.MyGdxGame;
 
 
@@ -41,21 +40,18 @@ public class GameMenuScreen implements Screen {
     private TextureRegion menuTitle;
     private TextureRegion menuHand;
     private TextureRegion menuDude;
-    private TextureAtlas atlasplay, atlasCredits, atlasScore, atlasShare;
+    private TextureAtlas atlasCredits, atlasScore, atlasShare;
     private TextButton buttonPlay, buttonShare, buttonCredits, buttonScore;
-    private IActivityRequestHandler hand;
+
     private BitmapFont black;
     private TextureAtlas atlas;
     private TextButtonStyle textButtonStyle;
 
 
-    public GameMenuScreen(final GameWorld myGame,
-                          final IActivityRequestHandler hand) {
-        // this.nativeFunctions = nativeFunctions;
-        stage = new Stage();
-        this.hand = hand;
+    public GameMenuScreen(final GameWorld myGame) {
 
-        hand.showAds(false);
+        stage = new Stage();
+
 
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(false);
@@ -92,7 +88,7 @@ public class GameMenuScreen implements Screen {
                             public void run() {
                                 ((Game) Gdx.app.getApplicationListener())
 
-                                        .setScreen(new GameScreen(hand));
+                                        .setScreen(new GameScreen());
 
                             }
                         })
@@ -111,14 +107,14 @@ public class GameMenuScreen implements Screen {
                             public void run() {
                                 ((Game) Gdx.app.getApplicationListener())
 
-                                        .setScreen(new CreditScreen(myGame, hand));
+                                        .setScreen(new CreditScreen(myGame));
 
                             }
                         })
                 ));
             }
         });
-        buttonScore.addListener(new ClickListener() {
+       /* buttonScore.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -128,7 +124,7 @@ public class GameMenuScreen implements Screen {
                 } else {
                     ((Game) Gdx.app.getApplicationListener())
 
-                            .setScreen(new ScoreScreen(hand));
+                            .setScreen(new ScoreScreen());
                 }
 
 
@@ -141,7 +137,7 @@ public class GameMenuScreen implements Screen {
 
                 hand.postOnFacebook(true);
             }
-        });
+        });*/
 
     }
 
@@ -161,7 +157,7 @@ public class GameMenuScreen implements Screen {
         menuTitle = Pictures.menuTitle;
         menuHand = Pictures.menuHand;
         menuDude = Pictures.menuDude;
-        //skin = Pictures.skin;
+
         textButtonStyle = Pictures.textButtonStyle;
 
     }
@@ -227,6 +223,7 @@ public class GameMenuScreen implements Screen {
 
     }
 
+
     @Override
     public void hide() {
         // TODO Auto-generated method stub
@@ -247,7 +244,7 @@ public class GameMenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        atlasplay.dispose();
+
 
         splashTexture.dispose();
 

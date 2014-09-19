@@ -4,57 +4,55 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
 import com.krille0x7c2.EpicSkydiver.Assets.Sounds;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Clouds;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin1;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin2;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin3;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.DuckLeft;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.DuckRight;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Player;
+import com.krille0x7c2.EpicSkydiver.Enums.State;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Cloud;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Coin;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Duck;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates.CloudTemplate;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates.CoinTemplate;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates.DuckTemplate;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates.PlayerTemplate;
 import com.krille0x7c2.EpicSkydiver.Screens.GameMenuScreen;
+
+import static com.krille0x7c2.EpicSkydiver.Enums.Direction.LEFT;
+import static com.krille0x7c2.EpicSkydiver.Enums.Direction.RIGHT;
+import static com.krille0x7c2.EpicSkydiver.Enums.State.GAMEOVER;
+import static com.krille0x7c2.EpicSkydiver.Enums.State.HIGHSCORE;
+import static com.krille0x7c2.EpicSkydiver.Enums.State.PAUSE;
+import static com.krille0x7c2.EpicSkydiver.Enums.State.RUN;
 
 
 public class GameWorld {
 
     private Player player;
 
-    private Clouds cloud, cloud1, cloud2;
-    private DuckLeft duckLeft;
-    private DuckRight duckRight;
-    private Coin1 coin1;
-    private Coin2 coin2;
-    private Coin3 coin3;
+    private Cloud cloud, cloud1, cloud2;
+    private Duck duckRight, duckLeft;
+    private Coin coin1, coin2, coin3;
     private int midPointY;
     private int score = 0;
     private int checker = 0;
-    private IActivityRequestHandler hand;
     private boolean fromGame = false;
-
-    public enum State {
-        RUN, PAUSE, GAMEOVER, HIGHSCORE
-    }
-
     private State state;
 
-    public GameWorld(int midPointY, IActivityRequestHandler hand) {
+    public GameWorld(int midPointY) {
         this.midPointY = midPointY;
-        this.hand = hand;
-        player = new Player(midPointY - 45, 2, 24, 45);
-        cloud = new Clouds(50, 110, 60, 35);
-        cloud1 = new Clouds(10, 50, 60, 35);
-        cloud2 = new Clouds(30, 180, 60, 35);
-        duckLeft = new DuckLeft(40, 150, 20, 15);
-        duckRight = new DuckRight(136, 190, 20, 15);
-        coin1 = new Coin1(MathUtils.random(10, 136 - 30), 230, 5, 5);
-        coin2 = new Coin2(MathUtils.random(10, 136 - 10), 220, 5, 5);
-        coin3 = new Coin3(MathUtils.random(10, 136 - 60), 210, 5, 5);
-        state = State.RUN;
+
+        player = new PlayerTemplate(midPointY - 45, 2, 24, 45);
+        cloud = new CloudTemplate(50, 110, 60, 35);
+        cloud1 = new CloudTemplate(10, 50, 60, 35);
+        cloud2 = new CloudTemplate(30, 180, 60, 35);
+        duckLeft = new DuckTemplate(40, 150, 20, 15, 30, -20, LEFT);
+        duckRight = new DuckTemplate(136, 190, 20, 15, -30, -20, RIGHT);
+        coin1 = new CoinTemplate(MathUtils.random(10, 136 - 30), 230, 5, 5, -20, 20);
+        coin2 = new CoinTemplate(MathUtils.random(10, 136 - 10), 220, 5, 5, -25, 50);
+        coin3 = new CoinTemplate(MathUtils.random(10, 136 - 60), 210, 5, 5, -30, 50);
+        state = RUN;
     }
 
     public void update(float delta) {
@@ -93,10 +91,8 @@ public class GameWorld {
                 duckLeft.getBoundsHead())) {
             if (score > Preference.getHighScore()) {
                 Preference.setHighScore(score);
-                if (hand.getSignedInGPGS()) {
-                    hand.submitScoreGPGS(score);
-                }
-                state = State.HIGHSCORE;
+
+                state = HIGHSCORE;
             }
             removeCoins();
             stopClouds();
@@ -114,10 +110,8 @@ public class GameWorld {
                 duckRight.getBoundsHead())) {
             if (score > Preference.getHighScore()) {
                 Preference.setHighScore(score);
-                if (hand.getSignedInGPGS()) {
-                    hand.submitScoreGPGS(score);
-                }
-                state = State.HIGHSCORE;
+
+                state = HIGHSCORE;
             }
             removeCoins();
             stopClouds();
@@ -159,7 +153,7 @@ public class GameWorld {
         }
 
         if (player.getY() > 204) {
-            state = State.GAMEOVER;
+            state = GAMEOVER;
 
             player.setY(20);
 
@@ -236,7 +230,7 @@ public class GameWorld {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            state = State.PAUSE;
+            state = PAUSE;
 
         }
     }
@@ -248,7 +242,7 @@ public class GameWorld {
             fromGame = true;
 
 
-            ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(this, hand));
+            ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(this));
 
 
         }
@@ -266,32 +260,32 @@ public class GameWorld {
     }
 
     public void setStateRun() {
-        state = State.RUN;
+        state = RUN;
     }
 
     public void setStatePause() {
-        state = State.PAUSE;
+        state = PAUSE;
     }
 
     public boolean isHighScore() {
-        return state == State.HIGHSCORE;
+        return state == HIGHSCORE;
     }
 
     public boolean isGameOver() {
 
-        return state == State.GAMEOVER;
+        return state == GAMEOVER;
     }
 
     public boolean isPaused() {
-        return state == State.PAUSE;
+        return state == PAUSE;
     }
 
     public boolean isRunning() {
-        return state == State.RUN;
+        return state == RUN;
     }
 
     public void resume() {
-        state = State.RUN;
+        state = RUN;
         Sounds.themeMusic.play();
 
     }
@@ -305,7 +299,7 @@ public class GameWorld {
         resetScore();
         checker = 0;
 
-        state = State.RUN;
+        state = RUN;
         Sounds.themeMusic.play();
 
     }
@@ -340,36 +334,36 @@ public class GameWorld {
 
     }
 
-    public Clouds getCloud() {
+    public Cloud getCloud() {
         return cloud;
     }
 
-    public Clouds getCloud1() {
+    public Cloud getCloud1() {
         return cloud1;
     }
 
-    public Clouds getCloud2() {
+    public Cloud getCloud2() {
         return cloud2;
     }
 
-    public DuckLeft getDuckLeft() {
+    public Duck getDuckLeft() {
         return duckLeft;
     }
 
-    public DuckRight getDuckRight() {
+    public Duck getDuckRight() {
         return duckRight;
 
     }
 
-    public Coin1 getCoins() {
+    public Coin getCoins() {
         return coin1;
     }
 
-    public Coin3 getCoin3() {
+    public Coin getCoin3() {
         return coin3;
     }
 
-    public Coin2 getCoin2() {
+    public Coin getCoin2() {
         return coin2;
     }
 

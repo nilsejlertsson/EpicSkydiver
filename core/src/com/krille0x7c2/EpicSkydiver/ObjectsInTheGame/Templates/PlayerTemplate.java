@@ -1,11 +1,15 @@
-package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame;
+package com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Templates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
-public class Player {
-
+/**
+ * Created by Christian Bodelsson on 9/19/14.
+ * email:krille0x7c2@gmail.com
+ */
+public class PlayerTemplate implements Player {
     private Vector2 position, velocity, acceleration;
     private float accelerometerValue;
     private int width, height;
@@ -20,7 +24,7 @@ public class Player {
     private boolean isAlive;
     private boolean inHoverMode;
 
-    public Player(float x, float y, int width, int height) {
+    public PlayerTemplate(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
@@ -102,16 +106,16 @@ public class Player {
         acceleration.x = 30;
     }
 
-    public void setY(float y) {
-        position.y = y;
-    }
-
     public float getX() {
         return position.x;
     }
 
     public float getY() {
         return position.y;
+    }
+
+    public void setY(float y) {
+        position.y = y;
     }
 
     public float getWidth() {

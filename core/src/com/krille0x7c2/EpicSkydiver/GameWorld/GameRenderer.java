@@ -3,27 +3,19 @@ package com.krille0x7c2.EpicSkydiver.GameWorld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.graphics.Color;
-
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
-import com.krille0x7c2.EpicSkydiver.InterfaceCallbacks.IActivityRequestHandler;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Clouds;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin1;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin2;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Coin3;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.DuckLeft;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.DuckRight;
-import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Player;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Cloud;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Coin;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Duck;
+import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
 
 public class GameRenderer {
@@ -33,24 +25,18 @@ public class GameRenderer {
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batcher;
     private Player player;
-    private Clouds cloud;
-    private Clouds cloud1;
-    private Clouds cloud2;
-    private DuckLeft duckL;
-    private DuckRight duckR;
-    private Coin1 coin1;
-    private Coin2 coin2;
-    private Coin3 coin3;
-    private BitmapFont whiteText;
+    private Cloud cloud, cloud1, cloud2;
+    private Duck duckL, duckR;
+    private Coin coin1, coin2, coin3;
+
     private int midPointY, gameHeight;
 
 
-    private IActivityRequestHandler hand;
     private TextureRegion pauseCloud, gameoverCloud;
 
-    public GameRenderer(GameWorld world, int gameHeight, int midPointY, IActivityRequestHandler hand) {
+    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         myWorld = world;
-        this.hand = hand;
+
         this.gameHeight = gameHeight;
         this.midPointY = midPointY;
 
@@ -87,7 +73,7 @@ public class GameRenderer {
             drawGameObjects(runTime);
             animate(player.getAccX(), player);
             drawScoreOnTopOfScreen();
-            hand.showAds(false);
+
 
         } else if (myWorld.isGameOver() || myWorld.isHighScore()) {
 
@@ -95,14 +81,14 @@ public class GameRenderer {
             drawGameoverWindow();
             drawScore();
             drawHighscore();
-            hand.showAds(true);
+
 
         } else if (myWorld.isPaused()) {
 
             drawGameObjects(runTime);
             animate(player.getAccX(), player);
             drawPauseWindow();
-            hand.showAds(true);
+
 
         }
 

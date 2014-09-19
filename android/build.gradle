@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion '19.1.0'
-    compileSdkVersion 19
+    buildToolsVersion '20'
+    compileSdkVersion 20
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -108,5 +108,4 @@ dependencies {
     compile 'com.google.android.gms:play-services:+'
     compile 'com.android.support:support-v4:+'
     compile project(':BaseGameUtils')
-    compile project(':facebook')
 }
