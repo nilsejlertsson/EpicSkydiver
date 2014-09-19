@@ -1,11 +1,11 @@
 package com.krille0x7c2.EpicSkydiver.Connections;
 
 public class Score {
-    private int Score;
+    private int score;
     private int id;
 
     public Score(int id, int score) {
-        Score = score;
+        this.score = score;
         this.id = id;
     }
 
@@ -14,11 +14,11 @@ public class Score {
     }
 
     public int getScore() {
-        return Score;
+        return score;
     }
 
     public void setScore(int score) {
-        Score = score;
+        this.score = score;
     }
 
     public int getId() {
