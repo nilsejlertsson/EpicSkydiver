@@ -32,7 +32,6 @@ public class GameRenderer {
     private SpriteBatch spriteBatch;
     private int midPointY;
     private TextureRegion pauseCloud, gameOverCloud;
-
     private Player player;
     private Cloud cloud, cloud1, cloud2;
     private Duck duckL, duckR;
@@ -40,7 +39,7 @@ public class GameRenderer {
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 
-        this.debug = Debug.CONTROLS;
+        this.debug = Debug.OBJECTS;
         gameWorld = world;
         this.midPointY = midPointY;
         orthographicCamera = new OrthographicCamera();
@@ -218,6 +217,12 @@ public class GameRenderer {
             shapeRenderer.rect(coin1.getBounds().x, coin1.getBounds().y,
                     coin1.getBounds().width, coin1.getBounds().height);
 
+            shapeRenderer.rect(coin2.getBounds().x, coin2.getBounds().y,
+                    coin2.getBounds().width, coin2.getBounds().height);
+
+            shapeRenderer.rect(coin3.getBounds().x, coin3.getBounds().y,
+                    coin3.getBounds().width, coin3.getBounds().height);
+
             shapeRenderer.end();
         }
     }
@@ -233,6 +238,8 @@ public class GameRenderer {
         coin1 = gameWorld.getCoins();
         coin2 = gameWorld.getCoin2();
         coin3 = gameWorld.getCoin3();
+
+
     }
 
     private void animate(float x, Player p1) {

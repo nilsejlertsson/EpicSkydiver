@@ -13,9 +13,10 @@ public class HandleTouchOnScreen implements InputProcessor {
 
     private Player player;
     private GameWorld gameWorld;
+    private int midpointy;
 
-    public HandleTouchOnScreen(Player player, GameWorld gameWorld) {
-
+    public HandleTouchOnScreen(Player player, GameWorld gameWorld, int midpointy) {
+        this.midpointy = midpointy;
         this.player = player;
         this.gameWorld = gameWorld;
 
@@ -23,6 +24,7 @@ public class HandleTouchOnScreen implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
 
         if (gameWorld.isPaused()) {
             gameWorld.resume();

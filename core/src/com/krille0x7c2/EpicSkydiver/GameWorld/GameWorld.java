@@ -42,8 +42,11 @@ public class GameWorld {
     private boolean fromGame;
     private State state;
 
+
     public GameWorld(int midPointY) {
+
         this.midPointY = midPointY;
+
 
         player = new PlayerTemplate(midPointY - 45, 2, 24, 45);
         cloud1 = new CloudTemplate(50, 110, 60, 35);
@@ -85,11 +88,7 @@ public class GameWorld {
 
     private void runTheGame(float delta) {
 
-        updatePlayer(delta);
-        updateClouds(delta);
-        updateDucks(delta);
-
-        updateCoins(delta);
+        updateObjectsInGame(delta);
 
         if (Intersector.overlaps(player.getBounds(), duckLeft.getBoundsBody())
                 || Intersector.overlaps(player.getBounds(),
@@ -99,10 +98,7 @@ public class GameWorld {
 
                 state = HIGHSCORE;
             }
-            removeCoins();
-            stopClouds();
-            stopDucks();
-            stopPlayer();
+            killGame();
 
             onlyPlayHitOnce(checker);
             checker++;
@@ -157,6 +153,7 @@ public class GameWorld {
 
         }
 
+
         if (player.getY() > 204) {
             state = GAMEOVER;
 
@@ -164,6 +161,20 @@ public class GameWorld {
 
         }
 
+    }
+
+    private void killGame() {
+        removeCoins();
+        stopClouds();
+        stopDucks();
+        stopPlayer();
+    }
+
+    private void updateObjectsInGame(float delta) {
+        updatePlayer(delta);
+        updateClouds(delta);
+        updateDucks(delta);
+        updateCoins(delta);
     }
 
 
@@ -210,12 +221,6 @@ public class GameWorld {
         coin3.update(delta);
     }
 
-    private boolean checkIfPressed() {
-
-        return Gdx.input.isKeyPressed(Keys.BACK)
-                || Gdx.input.isKeyPressed(Keys.ENTER);
-    }
-
     private boolean checkPressed() {
         return Gdx.input.isKeyPressed(Keys.BACK)
                 || Gdx.input.isKeyPressed(Keys.ENTER);
@@ -235,7 +240,7 @@ public class GameWorld {
 
 
     private void checkPauseOnPause() {
-        if (checkIfPressed()) {
+        if (checkPressed()) {
             Sounds.themeMusic.stop();
             fromGame = true;
 
@@ -372,5 +377,4 @@ public class GameWorld {
     public void addScore(int add) {
         score += add;
     }
-
 }

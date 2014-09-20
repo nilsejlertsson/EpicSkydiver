@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
         int midPointY = (int) (gameHeight / 2);
         gameWorld = new GameWorld(midPointY);
         gameRenderer = new GameRenderer(gameWorld, (int) gameHeight, midPointY);
-        Gdx.input.setInputProcessor(new HandleTouchOnScreen(gameWorld.getPlayer(), gameWorld));
+        Gdx.input.setInputProcessor(new HandleTouchOnScreen(gameWorld.getPlayer(), gameWorld, midPointY));
         Gdx.input.setCatchBackKey(true);
 
     }
