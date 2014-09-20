@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
+import com.krille0x7c2.EpicSkydiver.Enums.Debug;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Cloud;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Coin;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Duck;
@@ -20,26 +21,26 @@ import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
 public class GameRenderer {
 
+    private final Debug debug;
+
     private GameWorld myWorld;
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batcher;
+    private int midPointY;
+    private TextureRegion pauseCloud, gameOverCloud;
+
     private Player player;
     private Cloud cloud, cloud1, cloud2;
     private Duck duckL, duckR;
     private Coin coin1, coin2, coin3;
 
-    private int midPointY, gameHeight;
-
-
-    private TextureRegion pauseCloud, gameoverCloud;
-
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
+
+        this.debug = Debug.CONTROLS;
+
         myWorld = world;
-
-        this.gameHeight = gameHeight;
         this.midPointY = midPointY;
-
         cam = new OrthographicCamera();
         cam.setToOrtho(true, 136, gameHeight);
 
@@ -57,7 +58,7 @@ public class GameRenderer {
     private void initAsset() {
 
         pauseCloud = Pictures.pauseWindow;
-        gameoverCloud = Pictures.gameoverWindow;
+        gameOverCloud = Pictures.gameoverWindow;
     }
 
     public void render(float runTime) {
@@ -93,8 +94,8 @@ public class GameRenderer {
         }
 
         batcher.end();
-        // debugObjects();
-        // debugControls();
+        debugObjects();
+        debugControls();
 
     }
 
@@ -144,7 +145,7 @@ public class GameRenderer {
     }
 
     private void drawGameoverWindow() {
-        batcher.draw(gameoverCloud, 0, midPointY - 70, 136, 136);
+        batcher.draw(gameOverCloud, 0, midPointY - 70, 136, 136);
     }
 
     private void drawScore() {
@@ -163,11 +164,13 @@ public class GameRenderer {
     }
 
     private void debugControls() {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.isTheDudeAlive()) {
-            player.onClickRight();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.isTheDudeAlive()) {
-            player.onClickLeft();
+        if (debug.equals(Debug.CONTROLS)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.isTheDudeAlive()) {
+                player.onClickRight();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.isTheDudeAlive()) {
+                player.onClickLeft();
+            }
         }
     }
 
@@ -195,28 +198,29 @@ public class GameRenderer {
     }
 
     private void debugObjects() {
+        if (debug.equals(Debug.OBJECTS)) {
+            shapeRenderer.begin(ShapeType.Filled);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.rect(player.getBounds().x, player.getBounds().y,
+                    player.getBounds().width, player.getBounds().height);
 
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(player.getBounds().x, player.getBounds().y,
-                player.getBounds().width, player.getBounds().height);
+            shapeRenderer.rect(duckL.getBoundsHead().x, duckL.getBoundsHead().y,
+                    duckL.getBoundsHead().width, duckL.getBoundsHead().height);
 
-        shapeRenderer.rect(duckL.getBoundsHead().x, duckL.getBoundsHead().y,
-                duckL.getBoundsHead().width, duckL.getBoundsHead().height);
+            shapeRenderer.rect(duckL.getBoundsBody().x, duckL.getBoundsBody().y,
+                    duckL.getBoundsBody().width, duckL.getBoundsBody().height);
 
-        shapeRenderer.rect(duckL.getBoundsBody().x, duckL.getBoundsBody().y,
-                duckL.getBoundsBody().width, duckL.getBoundsBody().height);
+            shapeRenderer.rect(duckR.getBoundsBody().x, duckR.getBoundsBody().y,
+                    duckR.getBoundsBody().width, duckR.getBoundsBody().height);
 
-        shapeRenderer.rect(duckR.getBoundsBody().x, duckR.getBoundsBody().y,
-                duckR.getBoundsBody().width, duckR.getBoundsBody().height);
+            shapeRenderer.rect(duckR.getBoundsHead().x, duckR.getBoundsHead().y,
+                    duckR.getBoundsHead().width, duckR.getBoundsHead().height);
 
-        shapeRenderer.rect(duckR.getBoundsHead().x, duckR.getBoundsHead().y,
-                duckR.getBoundsHead().width, duckR.getBoundsHead().height);
+            shapeRenderer.rect(coin1.getBounds().x, coin1.getBounds().y,
+                    coin1.getBounds().width, coin1.getBounds().height);
 
-        shapeRenderer.rect(coin1.getBounds().x, coin1.getBounds().y,
-                coin1.getBounds().width, coin1.getBounds().height);
-
-        shapeRenderer.end();
+            shapeRenderer.end();
+        }
     }
 
     private void getTheObjectsFromGameWorld() {
@@ -239,7 +243,7 @@ public class GameRenderer {
         } else if (x < -2 && p1.isTheDudeAlive()) {
             batcher.draw(Pictures.dudeRight, p1.getX(), p1.getY(),
                     p1.getWidth(), p1.getHeight());
-        } else if (p1.isTheDudeAlive() == false) {
+        } else if (!p1.isTheDudeAlive()) {
             batcher.draw(Pictures.dudeDown, p1.getX(), p1.getY(),
                     p1.getWidth(), p1.getHeight());
         } else {
