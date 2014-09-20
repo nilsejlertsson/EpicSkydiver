@@ -8,38 +8,32 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
-import com.krille0x7c2.EpicSkydiver.Connections.Score;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class ScoreScreen implements Screen {
 
     public static Texture textureStart;
-    public GameWorld myGame;
-    protected BitmapFont whiteText;
-    private SpriteBatch batch;
-    private OrthographicCamera cam;
-    private Score score;
+    public GameWorld gameWorld;
+    private SpriteBatch spriteBatch;
+    private OrthographicCamera orthographicCamera;
     private TextureRegion splashBackground;
-    private Texture splashTexture;
-
-
-    private Sprite splash;
 
 
     public ScoreScreen() {
 
 
-        cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, 204);
-        batch = new SpriteBatch();
-        batch.setProjectionMatrix(cam.combined);
+        orthographicCamera = new OrthographicCamera();
+        orthographicCamera.setToOrtho(true, 136, 204);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(orthographicCamera.combined);
         loadPic();
         Gdx.input.setCatchBackKey(true);
 
@@ -51,14 +45,11 @@ public class ScoreScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-
-        batch.draw(splashBackground, 0, 0, 136, 204);
+        spriteBatch.begin();
+        spriteBatch.draw(splashBackground, 0, 0, 136, 204);
         drawHighScoreTitle();
         drawHighScore();
-
-        batch.end();
+        spriteBatch.end();
 
     }
 
@@ -73,7 +64,7 @@ public class ScoreScreen implements Screen {
             @Override
             public boolean keyUp(final int keycode) {
                 if (keycode == Keys.BACK) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(gameWorld));
                 }
                 return false;
             }
@@ -87,14 +78,14 @@ public class ScoreScreen implements Screen {
 
     private void drawHighScoreTitle() {
         String title = "Highscore";
-        Pictures.whiteHighScoreTitle.draw(batch, title, 8, 10);
+        Pictures.whiteHighScoreTitle.draw(spriteBatch, title, 8, 10);
     }
 
     private void drawHighScore() {
 
 
         String scoreFromPref = Preference.getHighScore() + "";
-        Pictures.whiteHighScore.draw(batch, "" + Preference.getHighScore(),
+        Pictures.whiteHighScore.draw(spriteBatch, "" + Preference.getHighScore(),
                 ((136 / 2)) - (13 * scoreFromPref.length()), 90);
 
     }

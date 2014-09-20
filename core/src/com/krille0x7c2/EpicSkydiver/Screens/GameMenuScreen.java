@@ -5,79 +5,51 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
-import com.krille0x7c2.EpicSkydiver.MyGdxGame;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class GameMenuScreen implements Screen {
 
-    private GameWorld myGame;
-    private MyGdxGame game;
+
     private Stage stage;
-    private SpriteBatch batch;
-    private Texture splashTexture;
-    private Sprite splash;
-
-    private Skin skin;
-    private OrthographicCamera cam;
-    private TextureRegion background;
-    private TextureRegion turnLeft;
-    private TextureRegion turnRight;
-    private TextureRegion menuTitle;
-    private TextureRegion menuHand;
-    private TextureRegion menuDude;
-    private TextureAtlas atlasCredits, atlasScore, atlasShare;
-    private TextButton buttonPlay, buttonShare, buttonCredits, buttonScore;
-
-    private BitmapFont black;
-    private TextureAtlas atlas;
+    private SpriteBatch spriteBatch;
+    private OrthographicCamera orthographicCamera;
+    private TextureRegion background, menuDude, menuHand, menuTitle, turnRight, turnLeft;
+    private TextButton playButton, buttonShare, buttonCredits, buttonScore;
     private TextButtonStyle textButtonStyle;
 
-
-    public GameMenuScreen(final GameWorld myGame) {
+    public GameMenuScreen(final GameWorld gameWorld) {
 
         stage = new Stage();
-
-
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(false);
-
         initAssets();
-
-        float gameHeight = setUpSize();
-
-        int midPointY = (int) (gameHeight / 2);
-
-        cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, 204);
-        batch = new SpriteBatch();
-        batch.setProjectionMatrix(cam.combined);
-
-        buttonPlay = new TextButton("Play", textButtonStyle);
+        orthographicCamera = new OrthographicCamera();
+        orthographicCamera.setToOrtho(true, 136, 204);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(orthographicCamera.combined);
+        playButton = new TextButton("Play", textButtonStyle);
         buttonScore = new TextButton("Score", textButtonStyle);
         buttonCredits = new TextButton("Credits", textButtonStyle);
         buttonShare = new TextButton("Share", textButtonStyle);
-
-        stage.addActor(buttonPlay);
+        stage.addActor(playButton);
         stage.addActor(buttonScore);
         stage.addActor(buttonCredits);
         stage.addActor(buttonShare);
 
-        buttonPlay.addListener(new ClickListener() {
+        playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stage.addAction(Actions.sequence(
@@ -107,7 +79,7 @@ public class GameMenuScreen implements Screen {
                             public void run() {
                                 ((Game) Gdx.app.getApplicationListener())
 
-                                        .setScreen(new CreditScreen(myGame));
+                                        .setScreen(new CreditScreen(gameWorld));
 
                             }
                         })
@@ -141,14 +113,6 @@ public class GameMenuScreen implements Screen {
 
     }
 
-    private float setUpSize() {
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        float gameWidth = 136;
-        float gameHeight = screenHeight / (screenWidth / gameWidth);
-        return gameHeight;
-    }
-
     private void initAssets() {
 
         background = Pictures.sky;
@@ -167,18 +131,14 @@ public class GameMenuScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-
-        batch.draw(background, 0, 0, 136, 204);
-        batch.draw(menuTitle, 20, 0, 100, 30);
-        batch.draw(menuDude, 44, 35, 50, 80);
-        batch.draw(turnLeft, 0, 35, 40, 40);
-        batch.draw(turnRight, 96, 35, 40, 40);
-        batch.draw(menuHand, 96, 80, 40, 40);
-
-        batch.end();
-
+        spriteBatch.begin();
+        spriteBatch.draw(background, 0, 0, 136, 204);
+        spriteBatch.draw(menuTitle, 20, 0, 100, 30);
+        spriteBatch.draw(menuDude, 44, 35, 50, 80);
+        spriteBatch.draw(turnLeft, 0, 35, 40, 40);
+        spriteBatch.draw(turnRight, 96, 35, 40, 40);
+        spriteBatch.draw(menuHand, 96, 80, 40, 40);
+        spriteBatch.end();
         stage.act(delta);
         stage.draw();
 
@@ -186,32 +146,32 @@ public class GameMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        buttonPlay.setSize(width / 2, height / 8);
+        playButton.setSize(width / 2, height / 8);
         buttonScore.setSize(width / 2, height / 8);
         buttonCredits.setSize(width / 2, height / 8);
         buttonShare.setSize(width / 2, height / 8);
 
-        buttonPlay.setPosition((width / 4) - (buttonPlay.getWidth() / 2),
-                (height / 3) - buttonPlay.getHeight());
+        playButton.setPosition((width / 4) - (playButton.getWidth() / 2),
+                (height / 3) - playButton.getHeight());
 
         buttonScore
                 .setPosition(
-                        (width / 4) - (buttonPlay.getWidth() / 2),
-                        ((height / 3) - buttonPlay.getHeight())
-                                - (buttonPlay.getHeight() + buttonPlay
+                        (width / 4) - (playButton.getWidth() / 2),
+                        ((height / 3) - playButton.getHeight())
+                                - (playButton.getHeight() + playButton
                                 .getHeight() / 3)
                 );
 
         buttonCredits.setPosition((width - width / 4)
-                        - (buttonPlay.getWidth() / 2),
-                (height / 3) - buttonPlay.getHeight()
+                        - (playButton.getWidth() / 2),
+                (height / 3) - playButton.getHeight()
         );
 
         buttonShare
                 .setPosition(
-                        (width - width / 4) - (buttonPlay.getWidth() / 2),
-                        ((height / 3) - buttonPlay.getHeight())
-                                - (buttonPlay.getHeight() + buttonPlay
+                        (width - width / 4) - (playButton.getWidth() / 2),
+                        ((height / 3) - playButton.getHeight())
+                                - (playButton.getHeight() + playButton
                                 .getHeight() / 3)
                 );
 
@@ -243,10 +203,7 @@ public class GameMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
 
-
-        splashTexture.dispose();
 
     }
 

@@ -8,8 +8,6 @@ public class Credits {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
-    private float x;
-    private float rotation;
     private int width;
     private int height;
 
@@ -34,10 +32,6 @@ public class Credits {
 
     }
 
-    public float getAccX() {
-        return x;
-    }
-
     public float getX() {
         return position.x;
     }
@@ -54,8 +48,5 @@ public class Credits {
         return height;
     }
 
-    public float getRotation() {
-        return rotation;
-    }
 
 }

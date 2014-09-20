@@ -1,7 +1,6 @@
 package com.krille0x7c2.EpicSkydiver.Assets;
 
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -12,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+/**
+ * Created by Christian Bodelsson
+ */
 public class Pictures {
 
 
@@ -24,55 +26,27 @@ public class Pictures {
 
     public static TextureRegion dudeFront, dudeLeft, dudeRight, dudeDown,
             duckUpLeft, duckLeft, duckUpRight, duckRight, sky, cloud, cloud1,
-            cloud2, dude2, credits, gameOverBackground, score, highScore,
-            gameOver, pauseWindow, gameoverWindow, coinFront, coinBack, coin2,
-            coin3, coin4, creditsText, menuDude;
-    public static TextureAtlas atlasplay;
+            cloud2, pauseWindow, gameOverWindow, coinFront, coin2,
+            coin3, coin4, creditsText, menuDude, menuTitle, turnLeft, turnRight, menuHand, menuTitle2;
+
     public static Skin skin;
-    public static TextureRegion menuTitle;
-    public static TextureRegion turnLeft;
-    public static TextureRegion turnRight;
-    public static TextureRegion menuHand;
-    public static Texture textureMenu;
-    public static TextureRegion menuTitle2;
     public static TextureAtlas atlas;
     public static BitmapFont black;
     public static TextButton.TextButtonStyle textButtonStyle;
-    private static float origFontSize;
-    private static Object generator;
-
 
     public static void load() {
         loadTexture();
-
-
         loadSky();
-
         loadFonts();
-
         loadTextureAtlas();
-
-        //loadSkins();
-
-
         loadMenu();
-
-
         loadClouds();
-
         loadDucks();
-
         loadCoins();
-
         loadTheDude();
-
         animateDucks();
-
         animateCoin();
-
         loadCredits();
-
-
         loadPauseScreen();
         loadGameOverScreen();
 
@@ -83,10 +57,7 @@ public class Pictures {
         black = new BitmapFont(Gdx.files.internal("font/black.fnt"), false);
         atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
-
         black.setScale(Gdx.graphics.getDensity() / 2, Gdx.graphics.getDensity() / 2);
-
-
         textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("button.up");
         textButtonStyle.down = skin.getDrawable("button.down");
@@ -132,8 +103,6 @@ public class Pictures {
     }
 
     private static void loadCredits() {
-//		sky = new TextureRegion(texture, 0, 1222, 272, 408);
-//		sky.flip(false, true);
 
         creditsText = new TextureRegion(texture, 1496, 0, 552, 2048);
         creditsText.flip(false, true);
@@ -247,8 +216,8 @@ public class Pictures {
     }
 
     private static void loadGameOverScreen() {
-        gameoverWindow = new TextureRegion(texture, 0, 456, 643, 617);
-        gameoverWindow.flip(false, true);
+        gameOverWindow = new TextureRegion(texture, 0, 456, 643, 617);
+        gameOverWindow.flip(false, true);
     }
 
     public static void dispose() {

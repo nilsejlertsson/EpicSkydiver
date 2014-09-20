@@ -3,6 +3,9 @@ package com.krille0x7c2.EpicSkydiver.CreditWorld;
 
 import com.krille0x7c2.EpicSkydiver.ObjectsOutsideTheGame.Credits;
 
+/**
+ * Created by Christian Bodelsson
+ */
 public class CreditWorld {
 
     private Credits cred;

@@ -2,7 +2,6 @@ package com.krille0x7c2.EpicSkydiver.GameWorld;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,33 +25,39 @@ import static com.krille0x7c2.EpicSkydiver.Enums.State.HIGHSCORE;
 import static com.krille0x7c2.EpicSkydiver.Enums.State.PAUSE;
 import static com.krille0x7c2.EpicSkydiver.Enums.State.RUN;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class GameWorld {
 
     private Player player;
 
-    private Cloud cloud, cloud1, cloud2;
+    private Cloud cloud1, cloud2, cloud3;
     private Duck duckRight, duckLeft;
     private Coin coin1, coin2, coin3;
     private int midPointY;
-    private int score = 0;
-    private int checker = 0;
-    private boolean fromGame = false;
+    private int score;
+    private int checker;
+    private boolean fromGame;
     private State state;
 
     public GameWorld(int midPointY) {
         this.midPointY = midPointY;
 
         player = new PlayerTemplate(midPointY - 45, 2, 24, 45);
-        cloud = new CloudTemplate(50, 110, 60, 35);
-        cloud1 = new CloudTemplate(10, 50, 60, 35);
-        cloud2 = new CloudTemplate(30, 180, 60, 35);
+        cloud1 = new CloudTemplate(50, 110, 60, 35);
+        cloud2 = new CloudTemplate(10, 50, 60, 35);
+        cloud3 = new CloudTemplate(30, 180, 60, 35);
         duckLeft = new DuckTemplate(40, 150, 20, 15, 30, -20, LEFT);
         duckRight = new DuckTemplate(136, 190, 20, 15, -30, -20, RIGHT);
         coin1 = new CoinTemplate(MathUtils.random(10, 136 - 30), 230, 5, 5, -20, 20);
         coin2 = new CoinTemplate(MathUtils.random(10, 136 - 10), 220, 5, 5, -25, 50);
         coin3 = new CoinTemplate(MathUtils.random(10, 136 - 60), 210, 5, 5, -30, 50);
         state = RUN;
+        score = 0;
+        checker = 0;
+        fromGame = false;
     }
 
     public void update(float delta) {
@@ -179,9 +184,9 @@ public class GameWorld {
     }
 
     private void stopClouds() {
-        cloud.stop();
         cloud1.stop();
         cloud2.stop();
+        cloud3.stop();
     }
 
     private void updatePlayer(float delta) {
@@ -189,9 +194,9 @@ public class GameWorld {
     }
 
     private void updateClouds(float delta) {
-        cloud.update(delta);
         cloud1.update(delta);
         cloud2.update(delta);
+        cloud3.update(delta);
     }
 
     private void updateDucks(float delta) {
@@ -207,20 +212,13 @@ public class GameWorld {
 
     private boolean checkIfPressed() {
 
-        if (Gdx.input.isKeyPressed(Keys.BACK)
-                || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            return true;
-
-        }
-        return false;
+        return Gdx.input.isKeyPressed(Keys.BACK)
+                || Gdx.input.isKeyPressed(Keys.ENTER);
     }
 
     private boolean checkPressed() {
-        if (Gdx.input.isKeyPressed(Keys.BACK)
-                || Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            return true;
-        }
-        return false;
+        return Gdx.input.isKeyPressed(Keys.BACK)
+                || Gdx.input.isKeyPressed(Keys.ENTER);
     }
 
     private void checkPause() {
@@ -324,18 +322,14 @@ public class GameWorld {
     }
 
     private void restartClouds() {
-        cloud.restart();
         cloud1.restart();
         cloud2.restart();
+        cloud3.restart();
     }
 
     public Player getPlayer() {
         return player;
 
-    }
-
-    public Cloud getCloud() {
-        return cloud;
     }
 
     public Cloud getCloud1() {
@@ -344,6 +338,10 @@ public class GameWorld {
 
     public Cloud getCloud2() {
         return cloud2;
+    }
+
+    public Cloud getCloud3() {
+        return cloud3;
     }
 
     public Duck getDuckLeft() {

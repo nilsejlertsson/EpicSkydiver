@@ -5,28 +5,31 @@ import com.badlogic.gdx.InputProcessor;
 import com.krille0x7c2.EpicSkydiver.GameWorld.GameWorld;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class HandleTouchOnScreen implements InputProcessor {
 
-    private Player myPlayer;
-    private GameWorld world;
+    private Player player;
+    private GameWorld gameWorld;
 
-    public HandleTouchOnScreen(Player player, GameWorld world) {
+    public HandleTouchOnScreen(Player player, GameWorld gameWorld) {
 
-        myPlayer = player;
-        this.world = world;
+        this.player = player;
+        this.gameWorld = gameWorld;
 
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        if (world.isPaused()) {
-            world.resume();
-        } else if (world.isGameOver()) {
-            world.restart();
+        if (gameWorld.isPaused()) {
+            gameWorld.resume();
+        } else if (gameWorld.isGameOver()) {
+            gameWorld.restart();
         } else {
-            myPlayer.onClick();
+            player.onClick();
         }
 
         return true;

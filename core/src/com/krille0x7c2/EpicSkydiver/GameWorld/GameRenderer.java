@@ -18,15 +18,18 @@ import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Coin;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Duck;
 import com.krille0x7c2.EpicSkydiver.ObjectsInTheGame.Interfaces.Player;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class GameRenderer {
 
     private final Debug debug;
 
-    private GameWorld myWorld;
-    private OrthographicCamera cam;
+    private GameWorld gameWorld;
+    private OrthographicCamera orthographicCamera;
     private ShapeRenderer shapeRenderer;
-    private SpriteBatch batcher;
+    private SpriteBatch spriteBatch;
     private int midPointY;
     private TextureRegion pauseCloud, gameOverCloud;
 
@@ -38,18 +41,14 @@ public class GameRenderer {
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 
         this.debug = Debug.CONTROLS;
-
-        myWorld = world;
+        gameWorld = world;
         this.midPointY = midPointY;
-        cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, gameHeight);
-
-        batcher = new SpriteBatch();
-        batcher.setProjectionMatrix(cam.combined);
-
+        orthographicCamera = new OrthographicCamera();
+        orthographicCamera.setToOrtho(true, 136, gameHeight);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(orthographicCamera.combined);
         shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(cam.combined);
-
+        shapeRenderer.setProjectionMatrix(orthographicCamera.combined);
         initAsset();
         getTheObjectsFromGameWorld();
 
@@ -58,25 +57,25 @@ public class GameRenderer {
     private void initAsset() {
 
         pauseCloud = Pictures.pauseWindow;
-        gameOverCloud = Pictures.gameoverWindow;
+        gameOverCloud = Pictures.gameOverWindow;
     }
 
     public void render(float runTime) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batcher.begin();
-        batcher.disableBlending();
-        batcher.draw(Pictures.sky, 0, 0, 250, 250);
+        spriteBatch.begin();
+        spriteBatch.disableBlending();
+        spriteBatch.draw(Pictures.sky, 0, 0, 250, 250);
 
-        if (myWorld.isRunning()) {
+        if (gameWorld.isRunning()) {
 
             drawGameObjects(runTime);
             animate(player.getAccX(), player);
             drawScoreOnTopOfScreen();
 
 
-        } else if (myWorld.isGameOver() || myWorld.isHighScore()) {
+        } else if (gameWorld.isGameOver() || gameWorld.isHighScore()) {
 
             drawGameObjects(runTime);
             drawGameoverWindow();
@@ -84,7 +83,7 @@ public class GameRenderer {
             drawHighscore();
 
 
-        } else if (myWorld.isPaused()) {
+        } else if (gameWorld.isPaused()) {
 
             drawGameObjects(runTime);
             animate(player.getAccX(), player);
@@ -93,7 +92,7 @@ public class GameRenderer {
 
         }
 
-        batcher.end();
+        spriteBatch.end();
         debugObjects();
         debugControls();
 
@@ -101,15 +100,15 @@ public class GameRenderer {
 
     private void drawScoreOnTopOfScreen() {
         scoreColor();
-        String score = myWorld.getScore() + "";
+        String score = gameWorld.getScore() + "";
 
 
-        Pictures.blackTextScoreOnScreen.draw(batcher, "" + myWorld.getScore(),
+        Pictures.blackTextScoreOnScreen.draw(spriteBatch, "" + gameWorld.getScore(),
                 (136 / 2) - (3 * score.length() - 1), 4);
     }
 
-    public void scoreColor() {
-        int score = myWorld.getScore();
+    private void scoreColor() {
+        int score = gameWorld.getScore();
 
         switch (score) {
             case 0:
@@ -141,23 +140,23 @@ public class GameRenderer {
     }
 
     private void drawPauseWindow() {
-        batcher.draw(pauseCloud, 0, midPointY - 70, 136, 136);
+        spriteBatch.draw(pauseCloud, 0, midPointY - 70, 136, 136);
     }
 
     private void drawGameoverWindow() {
-        batcher.draw(gameOverCloud, 0, midPointY - 70, 136, 136);
+        spriteBatch.draw(gameOverCloud, 0, midPointY - 70, 136, 136);
     }
 
     private void drawScore() {
-        String score = myWorld.getScore() + "";
-        Pictures.blackTextScoreInGameOver.draw(batcher,
-                "" + myWorld.getScore(), (136 / 2) - (10 * score.length()),
+        String score = gameWorld.getScore() + "";
+        Pictures.blackTextScoreInGameOver.draw(spriteBatch,
+                "" + gameWorld.getScore(), (136 / 2) - (10 * score.length()),
                 midPointY - 40);
     }
 
     private void drawHighscore() {
         String score = Preference.getHighScore() + "";
-        Pictures.blackTextHighScoreInGameOver.draw(batcher,
+        Pictures.blackTextHighScoreInGameOver.draw(spriteBatch,
                 "" + Preference.getHighScore(), (136 / 2)
                         - (6 * score.length()), midPointY + 7
         );
@@ -175,24 +174,24 @@ public class GameRenderer {
     }
 
     private void drawGameObjects(float runTime) {
-        batcher.enableBlending();
-        batcher.draw(Pictures.cloud, cloud.getX(), cloud.getY(),
+        spriteBatch.enableBlending();
+        spriteBatch.draw(Pictures.cloud, cloud.getX(), cloud.getY(),
                 cloud.getWidth(), cloud.getHeight());
-        batcher.draw(Pictures.cloud1, cloud1.getX(), cloud1.getY(),
+        spriteBatch.draw(Pictures.cloud1, cloud1.getX(), cloud1.getY(),
                 cloud1.getWidth(), cloud1.getHeight());
-        batcher.draw(Pictures.cloud2, cloud2.getX(), cloud2.getY(),
+        spriteBatch.draw(Pictures.cloud2, cloud2.getX(), cloud2.getY(),
                 cloud2.getWidth(), cloud2.getHeight());
-        batcher.draw(Pictures.duckAnimationL.getKeyFrame(runTime),
+        spriteBatch.draw(Pictures.duckAnimationL.getKeyFrame(runTime),
                 duckL.getX(), duckL.getY(), duckL.getWidth(), duckL.getHeight());
-        batcher.draw(Pictures.duckAnimationR.getKeyFrame(runTime),
+        spriteBatch.draw(Pictures.duckAnimationR.getKeyFrame(runTime),
                 duckR.getX(), duckR.getY(), duckR.getWidth(), duckR.getHeight());
-        batcher.draw(Pictures.coinAnimation.getKeyFrame(runTime), coin1.getX(),
+        spriteBatch.draw(Pictures.coinAnimation.getKeyFrame(runTime), coin1.getX(),
                 coin1.getY(), coin1.getWidth(), coin1.getHeight());
 
-        batcher.draw(Pictures.coinAnimation1.getKeyFrame(runTime),
+        spriteBatch.draw(Pictures.coinAnimation1.getKeyFrame(runTime),
                 coin2.getX(), coin2.getY(), coin2.getWidth(), coin2.getHeight());
 
-        batcher.draw(Pictures.coinAnimation2.getKeyFrame(runTime),
+        spriteBatch.draw(Pictures.coinAnimation2.getKeyFrame(runTime),
                 coin3.getX(), coin3.getY(), coin3.getWidth(), coin3.getHeight());
 
     }
@@ -225,29 +224,29 @@ public class GameRenderer {
 
     private void getTheObjectsFromGameWorld() {
 
-        player = myWorld.getPlayer();
-        cloud = myWorld.getCloud();
-        cloud1 = myWorld.getCloud1();
-        cloud2 = myWorld.getCloud2();
-        duckL = myWorld.getDuckLeft();
-        duckR = myWorld.getDuckRight();
-        coin1 = myWorld.getCoins();
-        coin2 = myWorld.getCoin2();
-        coin3 = myWorld.getCoin3();
+        player = gameWorld.getPlayer();
+        cloud = gameWorld.getCloud1();
+        cloud1 = gameWorld.getCloud2();
+        cloud2 = gameWorld.getCloud3();
+        duckL = gameWorld.getDuckLeft();
+        duckR = gameWorld.getDuckRight();
+        coin1 = gameWorld.getCoins();
+        coin2 = gameWorld.getCoin2();
+        coin3 = gameWorld.getCoin3();
     }
 
     private void animate(float x, Player p1) {
         if (x > 2 && p1.isTheDudeAlive()) {
-            batcher.draw(Pictures.dudeLeft, p1.getX(), p1.getY(),
+            spriteBatch.draw(Pictures.dudeLeft, p1.getX(), p1.getY(),
                     p1.getWidth(), p1.getHeight());
         } else if (x < -2 && p1.isTheDudeAlive()) {
-            batcher.draw(Pictures.dudeRight, p1.getX(), p1.getY(),
+            spriteBatch.draw(Pictures.dudeRight, p1.getX(), p1.getY(),
                     p1.getWidth(), p1.getHeight());
         } else if (!p1.isTheDudeAlive()) {
-            batcher.draw(Pictures.dudeDown, p1.getX(), p1.getY(),
+            spriteBatch.draw(Pictures.dudeDown, p1.getX(), p1.getY(),
                     p1.getWidth(), p1.getHeight());
         } else {
-            batcher.draw(Pictures.dudeFront, p1.getX(), p1.getY(), p1.getWidth(),
+            spriteBatch.draw(Pictures.dudeFront, p1.getX(), p1.getY(), p1.getWidth(),
                     p1.getHeight());
         }
 

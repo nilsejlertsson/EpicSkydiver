@@ -10,28 +10,22 @@ import com.krille0x7c2.EpicSkydiver.InputControls.HandleTouchOnScreen;
 
 public class GameScreen implements Screen {
 
-    private GameWorld world;
-    private GameRenderer renderer;
+    private GameWorld gameWorld;
+    private GameRenderer gameRenderer;
     private float runTime;
 
 
     public GameScreen() {
 
-
         Sounds.load();
-
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float gameWidth = 136;
         float gameHeight = screenHeight / (screenWidth / gameWidth);
-
         int midPointY = (int) (gameHeight / 2);
-
-
-        world = new GameWorld(midPointY);
-        renderer = new GameRenderer(world, (int) gameHeight, midPointY);
-
-        Gdx.input.setInputProcessor(new HandleTouchOnScreen(world.getPlayer(), world));
+        gameWorld = new GameWorld(midPointY);
+        gameRenderer = new GameRenderer(gameWorld, (int) gameHeight, midPointY);
+        Gdx.input.setInputProcessor(new HandleTouchOnScreen(gameWorld.getPlayer(), gameWorld));
         Gdx.input.setCatchBackKey(true);
 
     }
@@ -39,8 +33,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         runTime += delta;
-        world.update(delta);
-        renderer.render(runTime);
+        gameWorld.update(delta);
+        gameRenderer.render(runTime);
     }
 
     @Override

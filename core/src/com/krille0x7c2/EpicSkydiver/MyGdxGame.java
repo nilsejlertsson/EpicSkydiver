@@ -6,9 +6,11 @@ import com.krille0x7c2.EpicSkydiver.Assets.Pictures;
 import com.krille0x7c2.EpicSkydiver.Assets.Preference;
 import com.krille0x7c2.EpicSkydiver.Screens.SplashScreen;
 
+/**
+ * Created by Christian Bodelsson
+ */
 
 public class MyGdxGame extends Game implements ApplicationListener {
-
 
     public MyGdxGame() {
 

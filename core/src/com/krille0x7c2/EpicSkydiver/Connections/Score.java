@@ -1,5 +1,8 @@
 package com.krille0x7c2.EpicSkydiver.Connections;
 
+/**
+ * Created by Christian Bodelsson
+ */
 public class Score {
     private int score;
     private int id;

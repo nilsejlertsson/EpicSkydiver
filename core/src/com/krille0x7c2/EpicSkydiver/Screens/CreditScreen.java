@@ -19,44 +19,43 @@ import com.krille0x7c2.EpicSkydiver.ObjectsOutsideTheGame.Credits;
 public class CreditScreen implements Screen {
 
 
-    public GameWorld myGame;
+    private GameWorld gameWorld;
     protected float screenWidth;
     protected float screenHeight;
     protected float gameWidth;
     protected float gameHeight;
     protected int midPointY;
-    private SpriteBatch batcher;
-    private Credits cred;
-    private OrthographicCamera cam;
+    private SpriteBatch spriteBatch;
+    private Credits credits;
+    private OrthographicCamera orthographicCamera;
     private ShapeRenderer shapeRenderer;
-    private TextureRegion bg;
+    private TextureRegion backGround;
 
 
-    public CreditScreen(GameWorld myGame) {
+    public CreditScreen(GameWorld gameWorld) {
 
 
-        this.myGame = myGame;
+        this.gameWorld = gameWorld;
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         gameWidth = 136;
         gameHeight = screenHeight / (screenWidth / gameWidth);
         Gdx.input.setCatchBackKey(true);
         midPointY = (int) (gameHeight / 2);
-        cred = new CreditWorld().getCred();
-        cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, gameHeight);
-
-        batcher = new SpriteBatch();
-        batcher.setProjectionMatrix(cam.combined);
+        credits = new CreditWorld().getCred();
+        orthographicCamera = new OrthographicCamera();
+        orthographicCamera.setToOrtho(true, 136, gameHeight);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(orthographicCamera.combined);
         shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(cam.combined);
+        shapeRenderer.setProjectionMatrix(orthographicCamera.combined);
         initAsset();
 
     }
 
     private void initAsset() {
 
-        bg = Pictures.sky;
+        backGround = Pictures.sky;
 
 
     }
@@ -68,16 +67,16 @@ public class CreditScreen implements Screen {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batcher.begin();
+        spriteBatch.begin();
 
 
-        batcher.draw(bg, 0, 0, 250, 250);
-        batcher.draw(Pictures.creditsText, cred.getX(), cred.getY(),
-                cred.getWidth(), cred.getHeight());
+        spriteBatch.draw(backGround, 0, 0, 250, 250);
+        spriteBatch.draw(Pictures.creditsText, credits.getX(), credits.getY(),
+                credits.getWidth(), credits.getHeight());
 
 
-        cred.update(delta);
-        batcher.end();
+        credits.update(delta);
+        spriteBatch.end();
 
     }
 
@@ -93,7 +92,7 @@ public class CreditScreen implements Screen {
             @Override
             public boolean keyUp(final int keycode) {
                 if (keycode == Keys.BACK) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(myGame));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new GameMenuScreen(gameWorld));
                 }
                 return false;
             }
