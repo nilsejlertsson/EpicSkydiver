@@ -39,7 +39,7 @@ public class GameRenderer {
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 
-        this.debug = Debug.OBJECTS;
+        this.debug = Debug.NO;
         gameWorld = world;
         this.midPointY = midPointY;
         orthographicCamera = new OrthographicCamera();
